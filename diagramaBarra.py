@@ -7,6 +7,9 @@ import re
 import plotly.graph_objs as go
 from urllib3.util import Retry
 from requests.adapters import HTTPAdapter
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Obtener los datos de pedidos desde el backend
 urlPedido = 'https://restaurant-modern-backend-c4j8.vercel.app/pedido'
@@ -203,4 +206,5 @@ def update_graph_factura(start_date_factura, end_date_factura):
     return figFacturas
 
 if __name__ == '__main__':
-    app.run_server(host='127.0.0.1', port=8050, debug=True)
+    port = int(os.environ.get('PORT', 8050))
+    app.run_server(host='0.0.0.0', port=port, debug=True)
