@@ -5,7 +5,28 @@ import requests
 import pandas as pd
 import re
 import plotly.graph_objs as go
+from urllib3.util import Retry
+from requests.adapters import HTTPAdapter
 
+# Obtener los datos de pedidos desde el backend
+urlPedido = 'https://restaurant-modern-backend-c4j8.vercel.app/pedido'
+proxies = {
+    "http": None,
+    "https": None,
+}
+
+# Configurar retries y timeout
+session = requests.Session()
+retry = Retry(
+    total=5,
+    read=5,
+    connect=5,
+    backoff_factor=0.3,
+    status_forcelist=(500, 502, 504)
+)
+adapter = HTTPAdapter(max_retries=retry)
+session.mount('http://', adapter)
+session.mount('https://', adapter)
 # Obtener los datos de pedidos desde el backend
 urlPedido = 'https://restaurant-modern-backend-c4j8.vercel.app/pedido'
 responsePedido = requests.get(urlPedido)
@@ -182,4 +203,4 @@ def update_graph_factura(start_date_factura, end_date_factura):
     return figFacturas
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(host='127.0.0.1', port=8050, debug=True)

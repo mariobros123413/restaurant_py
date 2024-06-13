@@ -1,1 +1,1 @@
-web: python app/diagramaBarra.py
+web: python diagramaBarra.py
