@@ -12,7 +12,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Obtener los datos de pedidos desde el backend
-urlPedido = 'https://restaurant-modern-backend-c4j8.vercel.app/pedido'
 proxies = {
     "http": None,
     "https": None,
@@ -31,7 +30,7 @@ adapter = HTTPAdapter(max_retries=retry)
 session.mount('http://', adapter)
 session.mount('https://', adapter)
 # Obtener los datos de pedidos desde el backend
-urlPedido = 'https://restaurant-modern-backend-c4j8.vercel.app/pedido'
+urlPedido = 'https://restaurant-modern-backend.vercel.app/pedido'
 responsePedido = requests.get(urlPedido)
 dataPedido = responsePedido.json()
 
