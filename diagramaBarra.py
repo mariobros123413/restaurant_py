@@ -101,9 +101,8 @@ dataFacturasPedido = responseFacturasPedido.json()['data']['facturas']
 dfFacturas = pd.DataFrame(dataFacturas)
 dfFacturas = dfFacturas.groupby('fecha').sum().reset_index()
 
-# Crear el gráfico circular para facturas
 figFacturas = go.Figure(data=[go.Scatter(x=dfFacturas['fecha'], y=dfFacturas['total'], mode='lines+markers')])
-figFacturas.update_layout(title='Total de Facturas por Fecha', xaxis_title='Fecha', yaxis_title='Total')
+figFacturas.update_layout(title='Total de Dinero facturado por Fecha', xaxis_title='Fecha', yaxis_title='Total')
 
 platos = []
 for factura in dataFacturasPedido:
@@ -114,7 +113,15 @@ for factura in dataFacturasPedido:
 dfPlatos = pd.DataFrame(platos)
 dfPlatos = dfPlatos.groupby('nombre').sum().reset_index()
 # Crear el gráfico circular para platos
-figPlatos = px.pie(dfPlatos, values='cantidad', names='nombre', title='Cantidad Total de Platos')
+# Filtrar los 7 platos más vendidos y agrupar el resto como "Otros"
+top_platos = dfPlatos.nlargest(12, 'cantidad')
+otros_platos = dfPlatos[~dfPlatos['nombre'].isin(top_platos['nombre'])]
+otros_suma = pd.DataFrame(data={'nombre': ['Otros'], 'cantidad': [otros_platos['cantidad'].sum()]})
+
+dfPlatos_filtrado = pd.concat([top_platos, otros_suma])
+
+# Crear el gráfico circular para platos
+figPlatos = px.pie(dfPlatos_filtrado, values='cantidad', names='nombre', title='Platos más vendidos')
 
 bebidas = []
 for factura in dataFacturasPedido:
@@ -125,7 +132,16 @@ for factura in dataFacturasPedido:
 dfBebidas = pd.DataFrame(bebidas)
 dfBebidas = dfBebidas.groupby('nombre').sum().reset_index()
 # Crear el gráfico circular para bebidas
-figBebidas = px.pie(dfBebidas, values='cantidad', names='nombre', title='Cantidad Total de Bebidas')
+top_bebidas = dfBebidas.nlargest(12, 'cantidad')
+otros_bebidas = dfBebidas[~dfBebidas['nombre'].isin(top_bebidas['nombre'])]
+otros_suma = pd.DataFrame(data={'nombre': ['Otros'], 'cantidad': [otros_bebidas['cantidad'].sum()]})
+
+dfBebidas_filtrado = pd.concat([top_bebidas, otros_suma])
+
+# Crear el gráfico circular para platos
+figBebidas = px.pie(dfBebidas_filtrado, values='cantidad', names='nombre', title='Cantidad Total de Bebidas')
+
+# figBebidas = px.pie(dfBebidas, values='cantidad', names='nombre', title='Cantidad Total de Bebidas')
 
 # Inicialización de la aplicación Dash
 app = dash.Dash(__name__)
@@ -201,7 +217,7 @@ def update_graph_factura(start_date_factura, end_date_factura):
     filtered_df = dfFacturas[(dfFacturas['fecha'] >= start_date_factura) & (dfFacturas['fecha'] <= end_date_factura)]
     
     figFacturas = go.Figure(data=[go.Scatter(x=filtered_df['fecha'], y=filtered_df['total'], mode='lines+markers')])
-    figFacturas.update_layout(title='Total de Facturas por Fecha', xaxis_title='Fecha', yaxis_title='Total')
+    figFacturas.update_layout(title='Total de Dinero facturado por Fecha', xaxis_title='Fecha', yaxis_title='Total')
     return figFacturas
 
 if __name__ == '__main__':
