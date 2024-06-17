@@ -58,8 +58,8 @@ figPedido = px.histogram(dfPedido, x='fecha', title='Cantidad de Pedidos por Fec
 
 urlFacturas = 'https://restaurant-modern-23.fly.dev/graphql'
 query = """
-    query Facturas {
-        facturas {
+    query GetFacturas {
+        getFacturas {
             nro
             total
             fecha
@@ -67,8 +67,8 @@ query = """
     }
 """
 query2 = """
-    query Facturas {
-    facturas {
+    query GetFacturas {
+    getFacturas {
         nro
         total
         fecha
