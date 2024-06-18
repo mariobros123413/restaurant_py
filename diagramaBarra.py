@@ -93,10 +93,10 @@ query2 = """
 }
 """
 responseFacturas = requests.post(urlFacturas, json={'query': query})
-dataFacturas = responseFacturas.json()['data']['facturas']
+dataFacturas = responseFacturas.json()['data']['getFacturas']
 
 responseFacturasPedido = requests.post(urlFacturas, json={'query': query2})
-dataFacturasPedido = responseFacturasPedido.json()['data']['facturas']
+dataFacturasPedido = responseFacturasPedido.json()['data']['getFacturas']
 
 dfFacturas = pd.DataFrame(dataFacturas)
 dfFacturas = dfFacturas.groupby('fecha').sum().reset_index()
