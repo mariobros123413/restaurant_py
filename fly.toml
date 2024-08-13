@@ -1,0 +1,20 @@
+# fly.toml app configuration file generated for restaurant-modern-py on 2024-06-18T15:58:52-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'restaurant-modern-py'
+primary_region = 'scl'
+
+[build]
+
+[http_service]
+  internal_port = 8050
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  size = 'performance-4x'

@@ -30,7 +30,7 @@ adapter = HTTPAdapter(max_retries=retry)
 session.mount('http://', adapter)
 session.mount('https://', adapter)
 # Obtener los datos de pedidos desde el backend
-urlPedido = 'https://restaurant-modern-backend.vercel.app/pedido'
+urlPedido = 'https://restaurant-ia.up.railway.app/pedido'
 responsePedido = requests.get(urlPedido)
 dataPedido = responsePedido.json()
 
@@ -56,7 +56,7 @@ dfPedido['fecha'] = dfPedido['fecha'].apply(convert_date)
 # Crear el gráfico de barras para pedidos
 figPedido = px.histogram(dfPedido, x='fecha', title='Cantidad de Pedidos por Fecha')
 
-urlFacturas = 'https://restaurant-modern-23.fly.dev/graphql'
+urlFacturas = 'https://restaurant-modern.fly.dev/graphql'
 query = """
     query GetFacturas {
         getFacturas {
